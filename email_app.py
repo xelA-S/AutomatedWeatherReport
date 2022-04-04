@@ -1,3 +1,4 @@
+from multiprocessing import AuthenticationError
 import smtplib
 import ssl  # secure socket layer
 from email.message import EmailMessage
@@ -14,22 +15,22 @@ def verify():
     email_password = start_code_password
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-        return server.login(sender_email, email_password)
-
+        server.login(sender_email, email_password)
 
 try:
     verify()
 except Exception:
-    print("Invalid password. Please Try Again.")
+    raise AuthenticationError
+    
 
 
-def WeatherReport():
+def WeatherReport(city):
     sender_email = "justtestingautomation@gmail.com"
     reciever_email = "asmith6398@gmail.com"
     email_password = start_code_password
 
     subject = "Daily Weather Report"
-    body = current_weather("london")
+    body = current_weather(city)
 
 
     message = EmailMessage()
@@ -51,7 +52,9 @@ def WeatherReport():
     print("Email Sent!")
 
 
-schedule.every().day.at("08:00").do(WeatherReport)
+
+schedule.every().day.at("08:00").do(WeatherReport,"london")
+
 
 
 while True:
