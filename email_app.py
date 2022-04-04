@@ -21,10 +21,6 @@ def verify():
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
         server.login(sender_email, email_password)
 
-try:
-    verify()
-except Exception:
-    raise PasswordError
     
 
 
@@ -56,12 +52,19 @@ def WeatherReport(city):
     print("Email Sent!")
 
 
-print("Automation now running.")
-
-schedule.every().day.at("08:00").do(WeatherReport,"london")
 
 
+def start_automation():
+    print("Automation now running.")
+    schedule.every().day.at("08:00").do(WeatherReport,"london")
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+try:
+    verify()
+except Exception:
+    raise PasswordError
+else:
+    start_automation()
