@@ -9,6 +9,10 @@ import time
 
 start_code_password = input("Enter your password: ")
 
+class PasswordError(Exception):
+    def __str__(self):
+        return  "Invalid password. Please try again."
+
 
 def verify():
     sender_email = "justtestingautomation@gmail.com"
@@ -20,7 +24,7 @@ def verify():
 try:
     verify()
 except Exception:
-    raise AuthenticationError
+    raise PasswordError
     
 
 
@@ -52,6 +56,7 @@ def WeatherReport(city):
     print("Email Sent!")
 
 
+print("Automation now running.")
 
 schedule.every().day.at("08:00").do(WeatherReport,"london")
 
